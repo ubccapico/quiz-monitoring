@@ -1,4 +1,6 @@
-![Image of Sauder](http://www.hec.ca/en/executive-education/news/2018/logo-UBC-Sauder.jpg)
+<p align="center">
+<img src="https://physicaltherapy.med.ubc.ca/files/2012/05/UBC-logo-signature-blue.gif" height=15% width=15%
+</p>
 
 # Quiz Monitoring
 Script to generate a csv file containing each time in PDT of when a student has left the Canvas quiz page (alt tabbed, changed browser tabs, etc.). It will also provide a link to the monitoring page of each student who has left the quiz page. This script is made specifically for quizzes that allow one attempt. It requires the course ID, quiz ID (IDs can be found in the quiz URL) and URL of the Canvas dashboard page.
