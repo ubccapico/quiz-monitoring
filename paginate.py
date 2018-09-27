@@ -18,7 +18,7 @@ def get_submission_event_paginated_list(url, c, q, token):
     r = requests.get(url + "api/v1/courses/" + str(c) + "/quizzes/" + str(q) + "/submissions?per_page=100", headers =  {'Authorization': 'Bearer ' + token})
     table = pd.read_json(r.text)
     df = pd.DataFrame(table)
-    
+       
     #grabs and concats pages    
     while r.links['current']['url'] != r.links['last']['url']:
         r = requests.get(r.links['next']['url'], 

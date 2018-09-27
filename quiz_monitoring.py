@@ -56,7 +56,7 @@ def get_dictionary(json_list):
 #========================================================================================================
 # Given a user_id, access token and url link to a Canvas page, return a string (User name : user_id)
 #========================================================================================================
-def get_name(user_id):
+def get_name(user_id, token, url):
     r = requests.get(url + '/api/v1/users/' + str(user_id) + "/profile?per_page=1000",
                                 headers =  {'Authorization': 'Bearer ' + token})
     j = json.loads(r.text)
@@ -102,15 +102,14 @@ def get_user_time_dictionary(json_list):
         time_stamps = []
         for index, row in events_table.iterrows():
             if str(row['quiz_submission_events']['event_type']) == "page_blurred":
-                
                 try:
                     # if there is a "page_focused" event directly after the "page_blurred", do not add it to the log
-                    if (not events_table.iloc[index]['quiz_submission_events']['created_at'] == events_table.iloc[index + 1]['quiz_submission_events']['created_at']):
-                        time_stamps.append(convert_time(parse(str(dateutil.parser.parse(str(row['quiz_submission_events']['created_at']))))))
-                        d.setdefault(student_id, time_stamps)
+                    if not (events_table.iloc[index]['quiz_submission_events']['created_at'] == events_table.iloc[index + 1]['quiz_submission_events']['created_at']):
+                        time_stamps.append(convert_time(parse(str(dateutil.parser.parse(str(row['quiz_submission_events']['created_at']))))))                    
                 except:
                     time_stamps.append(convert_time(parse(str(dateutil.parser.parse(str(row['quiz_submission_events']['created_at']))))))
-                    d.setdefault(student_id, time_stamps)
+
+            d.setdefault(student_id, time_stamps)
     return d
     
 
@@ -150,16 +149,13 @@ def convert_time(s):
 # Begin main script
 #========================================================================================================
 
-with open('Canvas API Token.txt','r') as f:
-    for line in f:
-        for word in line.split():
-           token = word 
+token = input("Enter token: ")
 
-course_id = input("Type the course id and press ENTER\n")
-quiz_id = input("Type the quiz id and press ENTER\n")
+course_id = input("Type the course id and press ENTER: ")
+quiz_id = input("Type the quiz id and press ENTER: ")
 
 # ex: https://canvas.ubc.ca/
-url = input("Copy and paste the url when you are on the canvas dashboard page and press ENTER\n")
+url = 'https://canvas.ubc.ca/'
 
 # get a list of each students submission_id, user_id, etc.
 student_info_list = paginate.get_submission_event_paginated_list(url, course_id, quiz_id, token)
